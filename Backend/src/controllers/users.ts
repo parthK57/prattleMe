@@ -20,12 +20,12 @@ export const signUpHandler = async (req: any, res: any, next: any) => {
       if (err) {
         return next(err);
       } else {
-        res.status(200).send("OK");
+        res.status(200).send("User ID Created!");
       }
     }
   );
 };
 
 export const loginHandler = async (req: any, res: any, next: any) => {
-  res.status(200).send("Ok");
+  res.status(200).send("OK!");
 };

@@ -6,6 +6,10 @@ body {
   background-size: cover;
 }
 
+a{
+  cursor: pointer;
+}
+
 @media screen and (max-width: 450px) {
   body {
     background-image: url("./wallpaper2-Mobile.jpg");

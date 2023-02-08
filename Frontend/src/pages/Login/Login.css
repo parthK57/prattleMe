@@ -14,7 +14,7 @@
 form {
   display: flex;
   flex-direction: column;
-  width: 400px;
+  width: 350px;
   background-color: rgba(255, 215, 222, 0.3);
   padding: 20px;
   border-radius: 20px;
@@ -26,7 +26,7 @@ input {
 }
 
 #form-title {
-  border-bottom: 1px solid rgb(101, 101, 101) !important;
+  border-bottom: 1px solid rgb(0, 0, 0) !important;
 }
 
 .btn{

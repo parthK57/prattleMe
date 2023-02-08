@@ -1,0 +1,62 @@
+#Chatbox-Title-Container {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  width: 100%;
+  background-color: rgba(249, 85, 112, 0.174);
+  border-bottom: 1px solid black;
+  border-radius: 0px 20px 0px 0px;
+}
+
+#ChatBox-Body {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  height: 75%;
+  overflow-y: scroll;
+}
+
+.friend-message-container {
+  width: 100%;
+  display: flex;
+}
+
+.message-container {
+  width: 100%;
+  display: flex;
+  justify-content: end;
+}
+
+.friend-msg {
+  background-color: rgb(23, 11, 103);
+  margin-bottom: 10px;
+  max-width: 200px;
+  border-radius: 10px;
+  padding: 5px;
+}
+
+.msg {
+  background-color: rgba(255, 215, 222, 0.174);
+  margin-bottom: 10px;
+  max-width: 200px;
+  border-radius: 10px;
+  padding: 5px;
+}
+
+#ChatBox-ToolBox {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid rgb(0, 0, 0);
+}
+
+#send-message {
+  max-height: 50px !important;
+  margin-top: 2% !important;
+}
+
+#message {
+  width: 90% !important;
+  margin-top: 2% !important;
+  margin-left: 5px;
+}

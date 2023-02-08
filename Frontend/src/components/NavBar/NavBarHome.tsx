@@ -1,12 +1,21 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./NavBar.css";
 
-const NavBar = () => {
+const NavBarHome = () => {
+  const navigate = useNavigate();
+
+  // @ts-expect-error
+  const logoutUser = (e) =>{
+    e.preventDefault();
+    localStorage.removeItem("email");
+    localStorage.removeItem("password");
+    navigate("/");
+  }
   return (
     <>
       <nav className="navbar navbar-expand-lg" id="navbar">
         <div className="container-fluid">
-          <a className="navbar-brand" href="#">
+          <a className="navbar-brand" onClick={() => navigate("/signup")}>
             prattleMe
           </a>
           <button
@@ -25,11 +34,11 @@ const NavBar = () => {
             id="navbarNavAltMarkup"
           >
             <div className="navbar-nav">
-              <a className="nav-link active" href="">
-                Login
+              <a className="nav-link active" onClick={() => navigate("/addfriends")}>
+                Add Friends
               </a>
-              <a className="nav-link" href="">
-                Sign Up
+              <a className="nav-link" onClick={logoutUser}>
+                Logout
               </a>
             </div>
           </div>
@@ -39,4 +48,4 @@ const NavBar = () => {
   );
 };
 
-export default NavBar;
+export default NavBarHome;

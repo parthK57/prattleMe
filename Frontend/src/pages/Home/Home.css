@@ -1,0 +1,20 @@
+#home-container {
+  margin-top: 5%;
+}
+
+#friendlist-container {
+  background-color: rgba(255, 215, 222, 0.174);
+  border-radius: 20px 0px 0px 20px;
+  border-right: 1px solid black;
+  padding: 0px;
+  margin: 0px;
+  max-height: 75vh;
+}
+
+#chatbox-container {
+  background-color: rgba(255, 215, 222, 0.174);
+  border-radius: 0px 20px 20px 0px;
+  padding: 0px;
+  margin: 0px;
+  max-height: 75vh;
+}

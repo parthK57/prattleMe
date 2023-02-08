@@ -1,0 +1,5 @@
+Create a Table called friends 
+
+user1       user2       isFriend        roomId
+email1      email32     true            1248241
+email9      email90     true            41249124
