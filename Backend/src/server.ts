@@ -27,11 +27,13 @@ export const io = new Server(server, {
 import signUpRoute from "./routes/users";
 import logninRoute from "./routes/users";
 import addUserRoute from "./routes/users";
+import getFriendsRoute from "./routes/users";
 import getMessageRoute from "./routes/messages";
 
 app.use(signUpRoute);
 app.use(logninRoute);
 app.use(addUserRoute);
+app.use(getFriendsRoute);
 app.use(getMessageRoute);
 
 // Error handler

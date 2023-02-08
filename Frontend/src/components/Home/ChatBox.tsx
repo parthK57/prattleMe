@@ -19,6 +19,7 @@ const ChatBox = () => {
       socket.emit("send_message", {
         email: email,
         password: password,
+        clientEmail: "clientEmail",
         message: message,
       });
       const messageInputElement = document.querySelector(

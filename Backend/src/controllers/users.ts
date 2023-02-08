@@ -1,3 +1,4 @@
+import ErrorHandler from "../Services/ErrorHandler";
 import { Body } from "../models/Body";
 import bcrypt from "bcrypt";
 import connectionPool from "../database/db";
@@ -19,7 +20,7 @@ export const signUpHandler = async (req: any, res: any, next: any) => {
     [username, email, phonenumber, hashedPassword],
     (err, result, fields) => {
       if (err) {
-        return next(err);
+        return next(new ErrorHandler(err.message, 500));
       } else {
         res.status(200).send("User ID Created!");
       }
@@ -43,18 +44,37 @@ export const addUserHandler = async (req: any, res: any, next: any) => {
     "SELECT email, username FROM users WHERE email = ? AND username = ?;",
     [clientEmail, clientUsername],
     (err: Error, results: any) => {
-      if (err) next(err);
+      if (err) return next(new ErrorHandler(err.message, 500));
       else {
-        // @ts-expect-error
-        db.execute(
-          "INSERT INTO friends (user1, user2, isFriend, room) VALUES (?, ?, ?, ?)",
-          [email, clientEmail, 1, UUID],
-          (err: Error, results: any) => {
-            if (err) next(err);
-            else res.status(200).send("User added!");
-          }
-        );
+        if (results.length == 0)
+          return next(new ErrorHandler("Invalid username or email!", 404));
+        else {
+          // @ts-expect-error
+          db.execute(
+            "INSERT INTO friends (user1, user2, room, user2Username) VALUES (?, ?, ?, ?)",
+            [email, clientEmail, UUID, clientUsername],
+            (err: Error, results: any) => {
+              if (err) next(new ErrorHandler(err.message, 500));
+              else res.status(200).send("User added!");
+            }
+          );
+        }
       }
+    }
+  );
+};
+
+export const getFriendsHandler = async (req: any, res: any, next: any) => {
+  const body = req.body;
+  const email = body.email;
+
+  // @ts-expect-error
+  await db.execute(
+    "SELECT user1, user2, room, user2Username FROM friends WHERE user1 = ?;",
+    [email],
+    (err: Error, results: any) => {
+      if (err) return next(new ErrorHandler(err.message, 404));
+      else res.status(200).json(results);
     }
   );
 };

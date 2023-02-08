@@ -6,6 +6,7 @@ const db = connectionPool;
 export const sendMessageHandler = async (req: any, res: any, next: any) => {
   const body = req.body;
   const email = body.email;
+  const clientEmail = body.clientEmail;
   const message = body.message;
 
   const currentTime = new Date();
@@ -20,11 +21,11 @@ export const sendMessageHandler = async (req: any, res: any, next: any) => {
 
   // @ts-expect-error
   db.execute(
-    "INSERT INTO messages (email, message, timestamp) VALUES (?,?,?);",
-    [email, message, timestamp],
+    "INSERT INTO messages (email, message, timestamp, clientEmail) VALUES (?,?,?,?);",
+    [email, message, timestamp, clientEmail],
     (err: Error, results: any) => {
       if (err) return next(new ErrorHandler(err.message, 500));
-      else res.status(201).json({ message: "RECIEVED" });
+      else res.status(201).send("RECIEVED!");
     }
   );
 };

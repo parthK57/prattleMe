@@ -74,7 +74,7 @@ const AddFriends = () => {
           <div className="mt-2 d-flex flex-column">
             <label htmlFor="email">Email:</label>
             <input
-              type="text"
+              type="email"
               className="form-control"
               id="email"
               onChange={(event) => setEmail(event.target.value)}
