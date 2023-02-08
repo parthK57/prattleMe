@@ -1,40 +1,37 @@
-import path from "path";
 import http from "http";
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import ErrorHandler from "./Services/ErrorHandler";
 import dotenv from "dotenv";
-
+import { Server } from "socket.io";
 
 dotenv.config({
   path: "../.env",
 });
-const app = express();
+export const app = express();
 const server = http.createServer(app);
-app.use(
-  cors({
-    origin: "*",
-  })
-);
+app.use(cors());
 
 app.use(bodyParser.json());
-// app.use(
-//   cors({
-//     origin: "http://127.0.0.1:5500",
-//   })
-// );
+
+// SOCKET.IO CONFIG
+export const io = new Server(server, {
+  cors: {
+    origin: "http://127.0.0.1:5173",
+  },
+});
 
 
 // Routes
 import signUpRoute from "./routes/users";
 import logninRoute from "./routes/users";
-import sendMessageRoute from "./routes/messages";
+import addUserRoute from "./routes/users";
 import getMessageRoute from "./routes/messages";
 
 app.use(signUpRoute);
 app.use(logninRoute);
-app.use(sendMessageRoute);
+app.use(addUserRoute);
 app.use(getMessageRoute);
 
 // Error handler

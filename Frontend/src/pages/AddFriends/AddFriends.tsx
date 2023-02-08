@@ -7,6 +7,9 @@ import "../Login/Login.css";
 import NavBar from "../../components/NavBar/NavBarAddFriends";
 import Notify from "../../components/Notify/Notify";
 
+const userEmail = localStorage.getItem("email");
+const userPassword = localStorage.getItem("password");
+
 const AddFriends = () => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
@@ -17,14 +20,27 @@ const AddFriends = () => {
   // @ts-expect-error
   const addUser = async (e) => {
     e.preventDefault();
+    const usernameElement = document.querySelector(
+      "#username"
+    ) as HTMLInputElement;
+    const emailElement = document.querySelector("#email") as HTMLInputElement;
     try {
-      const response = await axios.post("http://localhost:5000/users/login", {
-        username: username,
-        email: email,
+      const response = await axios.post("http://localhost:5000/users/adduser", {
+        email: userEmail,
+        password: userPassword,
+        clientEmail: email,
+        clientUsername: username,
       });
-      //console.log(response.data);
+      console.log(response.data);
       if (response.status == 200) {
         setNotify(true);
+        setNotifyMessage(response.data);
+        setTimeout(() => {
+          setNotify(false);
+          usernameElement.value = "";
+          emailElement.value = "";
+          setNotifyMessage("");
+        }, 3000);
       }
     } catch (error) {
       setNotify(true);
@@ -32,6 +48,8 @@ const AddFriends = () => {
       setNotifyMessage(error.response.data);
       setTimeout(() => {
         setNotify(false);
+        usernameElement.value = "";
+        emailElement.value = "";
       }, 3000);
     }
   };

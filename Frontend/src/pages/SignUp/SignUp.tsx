@@ -4,7 +4,7 @@ import axios from "axios";
 import "../Login/Login.css";
 
 // Components
-import NavBar from "../../components/NavBar";
+import NavBar from "../../components/NavBar/NavBar";
 import Notify from "../../components/Notify/Notify";
 
 const SignUp = () => {

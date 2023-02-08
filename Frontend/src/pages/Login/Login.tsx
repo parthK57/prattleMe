@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Navbar from "../../components/NavBar";
+import Navbar from "../../components/NavBar/NavBar";
 import "./Login.css";
 import Notify from "../../components/Notify/Notify";
 

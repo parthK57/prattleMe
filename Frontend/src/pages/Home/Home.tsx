@@ -1,5 +1,5 @@
 import "./Home.css";
-import NavBarHome from "../../components/NavBarHome";
+import NavBarHome from "../../components/NavBar/NavBarHome";
 import FriendList from "../../components/Home/FriendList";
 import ChatBox from "../../components/Home/ChatBox";
 
