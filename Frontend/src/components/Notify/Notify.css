@@ -1,0 +1,8 @@
+.notify {
+  color: white !important;
+  width: 400px;
+  padding: 20px;
+  margin-top: 25px;
+  background-color: rgba(255, 215, 222, 0.3);
+  border-radius: 20px;
+}

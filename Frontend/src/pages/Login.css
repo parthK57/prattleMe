@@ -1,0 +1,39 @@
+* {
+  color: white !important;
+}
+
+#form-container {
+  width: 100%;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  background-color: rgba(255, 215, 222, 0.3);
+  padding: 20px;
+  border-radius: 20px;
+}
+
+input {
+  margin-top: 3%;
+  color: black !important;
+}
+
+#form-title {
+  border-bottom: 1px solid rgb(101, 101, 101) !important;
+}
+
+.btn{
+    margin-right: 10px;
+    background-color: rgb(23, 11, 103);
+}
+
+.btn:hover{
+    background-color: rgb(31, 15, 134);
+}

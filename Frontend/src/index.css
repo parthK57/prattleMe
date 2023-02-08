@@ -1,0 +1,15 @@
+body {
+  padding: 0px;
+  margin: 0px;
+  background-image: url("./wallpaper2.jpg  ");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+@media screen and (max-width: 450px) {
+  body {
+    background-image: url("./wallpaper2-Mobile.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+}
