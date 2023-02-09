@@ -29,12 +29,14 @@ import logninRoute from "./routes/users";
 import addUserRoute from "./routes/users";
 import getFriendsRoute from "./routes/users";
 import getMessageRoute from "./routes/messages";
+import sendMessageRoute from "./routes/messages";
 
 app.use(signUpRoute);
 app.use(logninRoute);
 app.use(addUserRoute);
 app.use(getFriendsRoute);
 app.use(getMessageRoute);
+app.use(sendMessageRoute);
 
 // Error handler
 app.use((err: ErrorHandler, req: any, res: any, next: any) => {

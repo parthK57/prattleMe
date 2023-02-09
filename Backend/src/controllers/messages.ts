@@ -5,9 +5,9 @@ const db = connectionPool;
 
 export const sendMessageHandler = async (req: any, res: any, next: any) => {
   const body = req.body;
-  const email = body.email;
-  const clientEmail = body.clientEmail;
-  const message = body.message;
+  const email = body.email as string;
+  const clientEmail = body.clientEmail as string;
+  const message = body.message as string;
 
   const currentTime = new Date();
   const currentOffset = currentTime.getTimezoneOffset();
@@ -31,11 +31,27 @@ export const sendMessageHandler = async (req: any, res: any, next: any) => {
 };
 
 export const getMessageHandler = async (req: any, res: any, next: any) => {
+  const body = req.body;
+  const email = body.email as string;
+  const clientEmail = body.clientEmail as string;
+
+  interface resultOBJ {
+    email: string;
+    message: string;
+    timestamp: string;
+    clientEmail: string;
+  }
+
+  type result = Array<resultOBJ>;
   // @ts-expect-error
-  db.execute("SELECT * FROM messages;", (err, results) => {
-    if (err) return next(new ErrorHandler(err.message, 500));
-    else {
-      res.status(200).send(results);
+  db.execute(
+    "SELECT email, message, timestamp, clientEmail FROM messages WHERE email = ? AND clientEmail = ? OR email = ? AND clientEmail = ?;",
+    [email, clientEmail, clientEmail, email],
+    (err: Error, results: result) => {
+      if (err) return next(new ErrorHandler(err.message, 500));
+      else {
+        res.status(200).send(results);
+      }
     }
-  });
+  );
 };
