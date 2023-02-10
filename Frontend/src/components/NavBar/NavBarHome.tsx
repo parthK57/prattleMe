@@ -9,6 +9,7 @@ const NavBarHome = () => {
     e.preventDefault();
     localStorage.removeItem("email");
     localStorage.removeItem("password");
+    localStorage.removeItem("username");
     navigate("/");
   }
   return (

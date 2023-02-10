@@ -29,11 +29,22 @@ export const signUpHandler = async (req: any, res: any, next: any) => {
 };
 
 export const loginHandler = async (req: any, res: any, next: any) => {
-  res.status(200).send("OK!");
+  const email = req.body.email;
+
+  // @ts-expect-error
+  await db.execute(
+    "SELECT username FROM users WHERE email = ?;",
+    [email],
+    (err: Error, results: any) => {
+      if (err) next(new ErrorHandler(err.message, 500));
+      else res.status(200).send(results[0].username);
+    }
+  );
 };
 
 export const addUserHandler = async (req: any, res: any, next: any) => {
   const body = req.body;
+  const username = body.username as string;
   const email = body.email as string;
   const clientEmail = body.clientEmail as string;
   const clientUsername = body.clientUsername as string;
@@ -55,7 +66,17 @@ export const addUserHandler = async (req: any, res: any, next: any) => {
             [email, clientEmail, UUID, clientUsername],
             (err: Error, results: any) => {
               if (err) next(new ErrorHandler(err.message, 500));
-              else res.status(200).send("User added!");
+              else {
+                // @ts-expect-error
+                db.execute(
+                  "INSERT INTO friends (user1, user2, room, user2Username) VALUES (?, ?, ?, ?)",
+                  [clientEmail, email, UUID, username],
+                  (err: Error, results: any) => {
+                    if (err) return next(new ErrorHandler(err.message, 500));
+                    else res.status(200).send("User added!");
+                  }
+                );
+              }
             }
           );
         }

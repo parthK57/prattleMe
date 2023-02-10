@@ -20,10 +20,10 @@ const Login = () => {
         email: email,
         password: password,
       });
-      //console.log(response.data);
       if (response.status == 200) {
         localStorage.setItem("email", `${email}`);
         localStorage.setItem("password", `${password}`);
+        localStorage.setItem("username", `${response.data}`);
         navigate("/home");
       }
     } catch (error) {

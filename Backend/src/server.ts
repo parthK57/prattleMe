@@ -16,11 +16,25 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // SOCKET.IO CONFIG
-export const io = new Server(server, {
+const io = new Server(server, {
   cors: {
     origin: "http://127.0.0.1:5173",
   },
 });
+io.on("connection", async (socket: any) => {
+  io.emit("server", "Connection: LIVE");
+
+  // PRIVATE MESSAGE
+  socket.on("send_message", (data: any) => {
+    socket.to(data.room).emit("server-client-message", data.message);
+  });
+
+  // JOIN PRIVATE ROOM FOR PRIVATE MESSAGES
+  socket.on("join-room", (data: any) => {
+    socket.join(data.room);
+  });
+});
+
 
 
 // Routes

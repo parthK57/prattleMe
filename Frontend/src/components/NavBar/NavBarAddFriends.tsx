@@ -5,12 +5,13 @@ const NavBarHome = () => {
   const navigate = useNavigate();
 
   // @ts-expect-error
-  const logoutUser = (e) =>{
+  const logoutUser = (e) => {
     e.preventDefault();
     localStorage.removeItem("email");
     localStorage.removeItem("password");
+    localStorage.removeItem("username");
     navigate("/");
-  }
+  };
   return (
     <>
       <nav className="navbar navbar-expand-lg" id="navbar">

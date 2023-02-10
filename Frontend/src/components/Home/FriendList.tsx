@@ -2,10 +2,16 @@ import axios from "axios";
 import "./FriendList.css";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { clearMessages, friendsListPopulate, messagesPopulate } from "../../store";
+import {
+  clearMessages,
+  friendsListPopulate,
+  messagesPopulate,
+  clearFriendsList
+} from "../../store";
 
 const email = localStorage.getItem("email");
 const password = localStorage.getItem("password");
+
 
 type friendsOBJ = {
   user1: string;
@@ -20,11 +26,16 @@ interface messages {
   clientEmail: string;
 }
 type messageArray = messages[];
-let frindsArray: Array<friendsOBJ> = [];
+let friendsArray: Array<friendsOBJ> = [];
 
-const FriendList = () => {
+const FriendList = (props:any) => {
   const dispatch = useDispatch();
+  const socket = props.socket;
 
+  // Resetting FriendList
+  dispatch(clearFriendsList());
+  friendsArray = [];
+  
   useEffect(() => {
     const getFriends = async () => {
       try {
@@ -36,8 +47,8 @@ const FriendList = () => {
           }
         );
         if (response.status == 200) {
-          frindsArray = response.data;
-          friendListPopulator(frindsArray);
+          friendsArray = response.data;
+          friendListPopulator(friendsArray);
         }
         // console.log(frindsArray);
       } catch (error) {
@@ -60,6 +71,10 @@ const FriendList = () => {
         friendContainer.style.cursor = "pointer";
         friendContainer.addEventListener("click", openChat);
         function openChat() {
+          // join the room for realtime chatting
+          socket.emit("join-room", jsonData[i]);
+
+          // clearing message and populating friends
           dispatch(clearMessages());
           dispatch(friendsListPopulate(jsonData[i]));
           const getMessages = async () => {
@@ -71,9 +86,9 @@ const FriendList = () => {
                   password: password,
                   clientEmail: jsonData[i].user2,
                 }
-                );
-                const messageArray = response.data as messageArray;
-                dispatch(messagesPopulate(messageArray));
+              );
+              const messageArray = response.data as messageArray;
+              dispatch(messagesPopulate(messageArray));
             } catch (error) {
               console.log(error);
             }
@@ -85,7 +100,8 @@ const FriendList = () => {
         friendListContainer.appendChild(friendContainer);
       }
     };
-  }, []);
+  }, [friendsArray]);
+
   return (
     <>
       <div id="FriendList-Title-Container">

@@ -9,6 +9,7 @@ import Notify from "../../components/Notify/Notify";
 
 const userEmail = localStorage.getItem("email");
 const userPassword = localStorage.getItem("password");
+const USERNAME = localStorage.getItem("username");
 
 const AddFriends = () => {
   const [email, setEmail] = useState("");
@@ -30,8 +31,9 @@ const AddFriends = () => {
         password: userPassword,
         clientEmail: email,
         clientUsername: username,
+        username: USERNAME,
       });
-      console.log(response.data);
+      
       if (response.status == 200) {
         setNotify(true);
         setNotifyMessage(response.data);
