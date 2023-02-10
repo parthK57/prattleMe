@@ -57,8 +57,8 @@ export const addUserHandler = async (req: any, res: any, next: any) => {
     (err: Error, results: any) => {
       if (err) return next(new ErrorHandler(err.message, 500));
       else {
-        if (results.length == 0)
-          return next(new ErrorHandler("Invalid username or email!", 404));
+        if (results[0] == undefined || null)
+          return next(new ErrorHandler("Invalid username or email!", 400));
         else {
           // @ts-expect-error
           db.execute(
@@ -120,7 +120,6 @@ export const createGroupHandler = async (req: any, res: any, next: any) => {
           [email],
           (err: Error, results: any) => {
             if (err) {
-              console.log(err);
               return next(new ErrorHandler(err.message, 500));
             } else {
               let group = results[0].groupname as string;
@@ -131,7 +130,6 @@ export const createGroupHandler = async (req: any, res: any, next: any) => {
                 [adminname, groupname],
                 (err: Error, results: any) => {
                   if (err) {
-                    console.log(err);
                     return next(new ErrorHandler(err.message, 500));
                   } else {
                     const id = results[0].id as string;
@@ -143,7 +141,6 @@ export const createGroupHandler = async (req: any, res: any, next: any) => {
                       [group, email],
                       (err: Error, results: any) => {
                         if (err) {
-                          console.log(err);
                           return next(new ErrorHandler(err.message, 500));
                         } else res.status(200).send("Group Created!");
                       }
@@ -173,6 +170,8 @@ export const joinGroupHandler = async (req: any, res: any, next: any) => {
     (err: Error, results: any) => {
       if (err) return next(new ErrorHandler(err.message, 500));
       else {
+        if (results[0] == undefined || null)
+          return next(new ErrorHandler("Invalid Details!", 400));
         const id = results[0].id;
         let members = results[0].members as string;
         members = members.concat(`,${email}`);
@@ -223,28 +222,33 @@ export const getGroupHandler = async (req: any, res: any, next: any) => {
     [email],
     (err: Error, results: any) => {
       if (err) {
-        console.log(err);
         return next(new ErrorHandler(err.message, 500));
       } else {
-        const groupIds = results[0].groupname.split(",") as Array<string>;
-
-        let groupDetailsJSON = [] as Array<{ id: string; groupname: string }>;
-        // GETTING GROUPNAME BY GROUPID TO SEND THE Array<groupnames> TO FRONTEND
-        for (let i = 0; i < groupIds.length; i++) {
-          let groupId = groupIds[i];
-          // @ts-expect-error
-          db.execute(
-            "SELECT groupname FROM prattlemegroups WHERE id = ?;",
-            [groupId],
-            (err: Error, results: any) => {
-              if (err) return next(new ErrorHandler(err.message, 500));
-              else {
-                let gName = results[0].groupname as string;
-                groupDetailsJSON.push({ id: `${groupId}`, groupname: `${gName}` });
-                if (i == groupIds.length - 1) res.status(200).json(groupDetailsJSON);
+        if (results[0].groupname == null) return res.status(200).json([]);
+        else {
+          const groupIds = results[0].groupname.split(",") as Array<string>;
+          let groupDetailsJSON = [] as Array<{ id: string; groupname: string }>;
+          // GETTING GROUPNAME BY GROUPID TO SEND THE Array<groupnames> TO FRONTEND
+          for (let i = 0; i < groupIds.length; i++) {
+            let groupId = groupIds[i];
+            // @ts-expect-error
+            db.execute(
+              "SELECT groupname FROM prattlemegroups WHERE id = ?;",
+              [groupId],
+              (err: Error, results: any) => {
+                if (err) return next(new ErrorHandler(err.message, 500));
+                else {
+                  let gName = results[0].groupname as string;
+                  groupDetailsJSON.push({
+                    id: `${groupId}`,
+                    groupname: `${gName}`,
+                  });
+                  if (i == groupIds.length - 1)
+                    res.status(200).json(groupDetailsJSON);
+                }
               }
-            }
-          );
+            );
+          }
         }
       }
     }

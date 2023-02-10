@@ -55,6 +55,26 @@ const Group = () => {
       }
     } catch (error) {
       console.log(error);
+      const groupNameElement = document.querySelector(
+        "#group-name"
+      ) as HTMLInputElement;
+      const adminNameElement = document.querySelector(
+        "#admin-name"
+      ) as HTMLInputElement;
+      const passwordElement = document.querySelector(
+        "#password"
+      ) as HTMLInputElement;
+
+      setNotify(true);
+      // @ts-expect-error
+      setNotifyMessage(error.response.data);
+      setTimeout(() => {
+        setNotify(false);
+        groupNameElement.value = "";
+        adminNameElement.value = "";
+        passwordElement.value = "";
+        setNotifyMessage("");
+      }, 3000);
     }
   };
 

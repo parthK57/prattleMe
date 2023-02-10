@@ -70,24 +70,24 @@ const messagesSlice = createSlice({
 const groupMessageSlice = createSlice({
   name: "groupMessages",
   initialState: {
-    value: {
-      groupname: "",
-      sentBy: "",
-      message: "",
-      timestamp: "",
-    },
+    value: [
+      {
+        from: "",
+        message: "",
+      },
+    ],
   },
   reducers: {
     groupMessagePopulate: (state, action) => {
       state.value = action.payload;
     },
     clearGroupMessages: (state) => {
-      state.value = {
-        groupname: "",
-        sentBy: "",
-        message: "",
-        timestamp: "",
-      };
+      state.value = [
+        {
+          from: "",
+          message: "",
+        },
+      ];
     },
   },
 });
@@ -139,7 +139,6 @@ export const { activateGroupChatMode, deactivateGroupChatMode } =
 export const { setGroupChatDetails, clearGroupChatDetails } =
   groupChatDetailsSlice.actions;
 
-  
 export const store = configureStore({
   reducer: {
     friendsList: friendsListSlice.reducer,

@@ -29,13 +29,21 @@ io.on("connection", async (socket: any) => {
     socket.to(data.room).emit("server-client-message", data.message);
   });
 
+  socket.on("send_group_message", (data: any) => {
+    socket.to(data.room).emit("server-client-group-message", data);
+  });
+
   // JOIN PRIVATE ROOM FOR PRIVATE MESSAGES
   socket.on("join-room", (data: any) => {
     socket.join(data.room);
   });
+
+  // JOIN PRIVATE GROUP
+  socket.on("join-group", (data: any) => {
+    console.log(data.id);
+    socket.join(data.id);
+  });
 });
-
-
 
 // Routes
 import signUpRoute from "./routes/users";
@@ -46,7 +54,7 @@ import getMessageRoute from "./routes/messages";
 import sendMessageRoute from "./routes/messages";
 import createGroupRoute from "./routes/users";
 import joinGroupRoute from "./routes/users";
-import getGroupRoute from "./routes/users"
+import getGroupRoute from "./routes/users";
 import sendGroupMessageRoute from "./routes/messages";
 import getGroupMessageRoute from "./routes/messages";
 

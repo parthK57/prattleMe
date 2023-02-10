@@ -10,6 +10,7 @@ import {
   activateGroupChatMode,
   deactivateGroupChatMode,
   setGroupChatDetails,
+  groupMessagePopulate,
 } from "../../store";
 
 const email = localStorage.getItem("email");
@@ -63,6 +64,7 @@ const FriendList = (props: any) => {
       }
     };
     getFriends();
+
     const getGroups = async () => {
       try {
         const response = await axios.post(
@@ -75,7 +77,6 @@ const FriendList = (props: any) => {
         if (response.status == 200) {
           group = response.data;
           groupPopulator(group);
-          console.log(group);
         }
       } catch (error) {
         console.log(error);
@@ -87,11 +88,7 @@ const FriendList = (props: any) => {
       const friendListContainer = document.querySelector(
         "#FriendList"
       ) as HTMLDivElement;
-      console.log(friendListContainer)
       for (let i = 0; i < jsonData.length; i++) {
-
-        console.log(jsonData[i].groupname, jsonData[i].id);
-
         const friendContainer = document.createElement("div");
         const friendName = document.createElement("p");
 
@@ -102,29 +99,35 @@ const FriendList = (props: any) => {
         friendContainer.addEventListener("click", openChat);
         function openChat() {
           // join the room for realtime chatting
-          socket.emit("join-room", jsonData[i]);
+          socket.emit("join-group", jsonData[i]);
 
           // clearing message and populating friends
           dispatch(clearMessages());
           dispatch(activateGroupChatMode(true));
-          dispatch(setGroupChatDetails({room: `${jsonData[i].id}`, groupname: `${jsonData[i].groupname}`}));
+          dispatch(
+            setGroupChatDetails({
+              room: `${jsonData[i].id}`,
+              groupname: `${jsonData[i].groupname}`,
+            })
+          );
           const getMessages = async () => {
             try {
               const response: any = await axios.post(
-                "http://localhost:5000/message/getmessage",
+                "http://localhost:5000/message/getgroupmessage",
                 {
                   email: email,
                   password: password,
-                  id: jsonData[i].id,
+                  groupname: jsonData[i].groupname,
+                  groupid: jsonData[i].id,
                 }
               );
-              const messageArray = response.data as messageArray;
-              dispatch(messagesPopulate(messageArray));
+              const groupMessageArray = response.data;
+              dispatch(groupMessagePopulate(groupMessageArray));
             } catch (error) {
               console.log(error);
             }
           };
-          //getMessages();
+          getMessages();
         }
         // Appending messages
         friendContainer.appendChild(friendName);
