@@ -14,6 +14,12 @@
   padding: 10px;
   height: 75%;
   overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+#ChatBox-Body::-webkit-scrollbar {
+  display: none;
 }
 
 .friend-message-container {

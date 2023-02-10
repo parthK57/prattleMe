@@ -1,22 +1,17 @@
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import "./NavBar.css";
-import { clearFriendsList, clearMessages } from "../../store";
 
-const NavBarHome = () => {
+const NavBarGroup = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   // @ts-expect-error
-  const logoutUser = (e) =>{
+  const logoutUser = (e) => {
     e.preventDefault();
     localStorage.removeItem("email");
     localStorage.removeItem("password");
     localStorage.removeItem("username");
-    dispatch(clearFriendsList());
-    dispatch(clearMessages());
     navigate("/");
-  }
+  };
   return (
     <>
       <nav className="navbar navbar-expand-lg" id="navbar">
@@ -40,11 +35,14 @@ const NavBarHome = () => {
             id="navbarNavAltMarkup"
           >
             <div className="navbar-nav">
-              <a className="nav-link active" onClick={() => navigate("/addfriends")}>
-                Add Friends
+              <a className="nav-link active" onClick={() => navigate("/home")}>
+                Home
               </a>
-              <a className="nav-link active" onClick={() => navigate("/group")}>
-                Groups
+              <a
+                className="nav-link active"
+                onClick={() => navigate("/addfriends")}
+              >
+                Add Friends
               </a>
               <a className="nav-link" onClick={logoutUser}>
                 Logout
@@ -57,4 +55,4 @@ const NavBarHome = () => {
   );
 };
 
-export default NavBarHome;
+export default NavBarGroup;

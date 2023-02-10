@@ -99,3 +99,48 @@ export const getFriendsHandler = async (req: any, res: any, next: any) => {
     }
   );
 };
+
+export const createGroupHandler = async (req: any, res: any, next: any) => {
+  const body = req.body;
+  const email = body.email;
+  const groupname = body.groupname;
+  const adminname = body.adminname;
+  const grouppassword = body.grouppassword;
+
+  // @ts-expect-error
+  await db.execute(
+    "INSERT INTO prattlemegroups (groupname, admin, members, password) VALUES (?,?,?,?)",
+    [groupname, adminname, email, grouppassword],
+    (err: Error, results: any) => {
+      if (err) return next(new ErrorHandler(err.message, 500));
+      else res.status(200).send("Group Created!");
+    }
+  );
+};
+
+export const joinGroupHandler = async (req: any, res: any, next: any) => {
+  const body = req.body;
+  const email = body.email;
+  const groupname = body.groupname;
+  const adminname = body.adminname;
+  const password = body.grouppassword;
+
+  // @ts-expect-error
+  await db.execute(
+    "SELECT id, members FROM prattlemegroups WHERE groupname = ? AND admin = ? AND password = ?",
+    [groupname, adminname, password],
+    (err: Error, results: any) => {
+      if (err) return next(new ErrorHandler(err.message, 500));
+      else{
+        const id = results[0].id;
+        let members = results[0].members as string;
+        members = members.concat(`;${email}`);
+        // @ts-expect-error
+        db.execute("UPDATE prattlemegroups SET members = ? WHERE id = ?", [members, id], (err: Error, results: any)=> {
+          if(err) return next(new ErrorHandler(err.message, 500));
+          else res.status(201).send("User added!");
+        })
+      }
+    }
+  );
+};

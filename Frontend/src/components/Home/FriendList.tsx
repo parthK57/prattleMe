@@ -1,7 +1,7 @@
 import axios from "axios";
 import "./FriendList.css";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useLayoutEffect } from "react";
+import { useDispatch } from "react-redux";
 import {
   clearMessages,
   friendsListPopulate,
@@ -36,7 +36,7 @@ const FriendList = (props:any) => {
   dispatch(clearFriendsList());
   friendsArray = [];
   
-  useEffect(() => {
+  useLayoutEffect(() => {
     const getFriends = async () => {
       try {
         const response = await axios.post(
@@ -100,7 +100,7 @@ const FriendList = (props:any) => {
         friendListContainer.appendChild(friendContainer);
       }
     };
-  }, [friendsArray]);
+  },[]);
 
   return (
     <>

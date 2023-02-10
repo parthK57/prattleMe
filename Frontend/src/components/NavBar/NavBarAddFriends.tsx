@@ -38,6 +38,9 @@ const NavBarHome = () => {
               <a className="nav-link active" onClick={() => navigate("/home")}>
                 Home
               </a>
+              <a className="nav-link active" onClick={() => navigate("/group")}>
+                Groups
+              </a>
               <a className="nav-link" onClick={logoutUser}>
                 Logout
               </a>

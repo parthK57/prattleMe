@@ -44,6 +44,8 @@ import addUserRoute from "./routes/users";
 import getFriendsRoute from "./routes/users";
 import getMessageRoute from "./routes/messages";
 import sendMessageRoute from "./routes/messages";
+import createGroupRoute from "./routes/users";
+import joinGroupRoute from "./routes/users";
 
 app.use(signUpRoute);
 app.use(logninRoute);
@@ -51,6 +53,8 @@ app.use(addUserRoute);
 app.use(getFriendsRoute);
 app.use(getMessageRoute);
 app.use(sendMessageRoute);
+app.use(createGroupRoute);
+app.use(joinGroupRoute);
 
 // Error handler
 app.use((err: ErrorHandler, req: any, res: any, next: any) => {

@@ -8,6 +8,7 @@ import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import SignUp from "./pages/SignUp/SignUp";
 import AddFriends from "./pages/AddFriends/AddFriends";
+import Group from "./pages/Grops/Group";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/home" element={<Home />}></Route>
           <Route path="/signup" element={<SignUp />}></Route>
           <Route path="/addfriends" element={<AddFriends />}></Route>
+          <Route path="/group" element={<Group />}></Route>
         </Routes>
       </Provider>
     </>

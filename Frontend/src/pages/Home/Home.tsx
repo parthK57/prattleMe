@@ -11,6 +11,9 @@ const Home = () => {
     <>
       <NavBarHome />
       <div className="container" id="home-container">
+        <div className="user-details-container">
+        <h5 className="user-details">Hello, {localStorage.getItem("username")?.split(" ")[0]}!</h5>
+        </div>
         <div className="row">
           <div className="col-4" id="friendlist-container">
             <FriendList socket={socket} />

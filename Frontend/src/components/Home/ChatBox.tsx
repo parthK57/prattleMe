@@ -30,7 +30,7 @@ const ChatBox = (props: any) => {
     (state: any) => state.messages.value
   );
   const socket = props.socket;
-  console.log(socket);
+
   // Send Message Logic
   const sendMessage = async () => {
     try {
@@ -75,10 +75,10 @@ const ChatBox = (props: any) => {
   // SOCKET RECIEVE MESSAGE
   useEffect(() => {
     socket.on("server", (data: any) => {
-      console.log(data);
+      console.log(`Message from server:${data}`);
     });
     socket.on("server-client-message", (data: any) => {
-      setMessageRecieved(data);
+      // setMessageRecieved(data);
       const chatBody = document.querySelector(
         "#ChatBox-Body"
       ) as HTMLDivElement;
@@ -87,12 +87,12 @@ const ChatBox = (props: any) => {
 
       messageContainer.className = "friend-message-container";
       messageElement.className = "friend-message";
-      messageElement.innerText = `${messageRecieved}`;
+      messageElement.innerText = `${data}`;
 
       messageContainer.appendChild(messageElement);
       chatBody.appendChild(messageContainer);
     });
-  }, [messageRecieved, socket]);
+  }, [messageRecieved]);
 
   // Recieve Message Logic
   useEffect(() => {
