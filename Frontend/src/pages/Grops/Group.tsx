@@ -102,7 +102,7 @@ const Group = () => {
     <>
       <NavBarGroup />
       <div
-        className="container d-flex flex-column justify-content-between w-50"
+        className="container d-flex flex-column justify-content-center align-items-center w-50"
         style={{ marginTop: "100px" }}
       >
         <div className="d-flex w-100 justify-content-between mb-3">
@@ -136,7 +136,7 @@ const Group = () => {
             <div className="mb-3">
               <label htmlFor="admin-name">Password:</label>
               <input
-                type="text"
+                type="password"
                 name="password"
                 id="password"
                 className="form-control"
@@ -193,7 +193,7 @@ const Group = () => {
             <div className="mb-3">
               <label htmlFor="create-password">Password:</label>
               <input
-                type="text"
+                type="password"
                 name="create-password"
                 id="create-password"
                 className="form-control"

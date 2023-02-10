@@ -46,6 +46,9 @@ import getMessageRoute from "./routes/messages";
 import sendMessageRoute from "./routes/messages";
 import createGroupRoute from "./routes/users";
 import joinGroupRoute from "./routes/users";
+import getGroupRoute from "./routes/users"
+import sendGroupMessageRoute from "./routes/messages";
+import getGroupMessageRoute from "./routes/messages";
 
 app.use(signUpRoute);
 app.use(logninRoute);
@@ -55,6 +58,9 @@ app.use(getMessageRoute);
 app.use(sendMessageRoute);
 app.use(createGroupRoute);
 app.use(joinGroupRoute);
+app.use(getGroupRoute);
+app.use(sendGroupMessageRoute);
+app.use(getGroupMessageRoute);
 
 // Error handler
 app.use((err: ErrorHandler, req: any, res: any, next: any) => {

@@ -6,6 +6,8 @@ import { useSelector } from "react-redux";
 
 const email = localStorage.getItem("email");
 const password = localStorage.getItem("password");
+const USERNAME = localStorage.getItem("username");
+
 interface messages {
   email: string;
   message: string;
@@ -19,13 +21,27 @@ const ChatBox = (props: any) => {
   const [messageRecieved, setMessageRecieved] = useState("");
   const [notifyMessage, setNotifyMessage] = useState("");
   const [notify, setNotify] = useState(false);
-  const user2Username = useSelector(
+
+  const groupChatMode: boolean = useSelector(
+    (state: any) => state.groupChatMode.value
+  );
+  console.log(groupChatMode);
+  const groupChatName: string | null = useSelector(
+    (state: any) => state.groupChatDetails.value.groupname
+  );
+  const groupChatRoom: string | null = useSelector(
+    (state: any) => state.groupChatDetails.value.room
+  );
+
+  const user2Username: string | null = useSelector(
     (state: any) => state.friendsList.value.user2Username
   );
-  const clientEmail = useSelector(
+  const clientEmail: string | null = useSelector(
     (state: any) => state.friendsList.value.user2
   );
-  const room = useSelector((state: any) => state.friendsList.value.room);
+  const room: string | null = useSelector(
+    (state: any) => state.friendsList.value.room
+  );
   const messageArray: messageArray = useSelector(
     (state: any) => state.messages.value
   );
@@ -72,6 +88,32 @@ const ChatBox = (props: any) => {
     }
   };
 
+  // Send Group Message Logic
+  const sendGroupMessage = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/users/sendgroupmessage",
+        {
+          email: email,
+          password: password,
+          groupname: groupChatName,
+          username: USERNAME,
+          message: message,
+          groupid: groupChatRoom,
+        }
+      );
+      console.log(response);
+      // clearing input tag
+      const messageInputElement = document.querySelector(
+        "#message"
+      ) as HTMLInputElement;
+      messageInputElement.value = "";
+      if (response.status == 201) {
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   // SOCKET RECIEVE MESSAGE
   useEffect(() => {
     socket.on("server", (data: any) => {
@@ -134,13 +176,16 @@ const ChatBox = (props: any) => {
           chatBody.appendChild(messageContainer);
         }
       };
-      populateChatbox(messageArray);
+      groupChatMode ? null : populateChatbox(messageArray);
     }
   }, [messageArray]);
+
   return (
     <>
       <div id="Chatbox-Title-Container">
-        <h4 id="Chatbox-Title">{user2Username}</h4>
+        <h4 id="Chatbox-Title">
+          {groupChatMode ? groupChatName : user2Username}
+        </h4>
       </div>
       <div id="ChatBox-Body">
         {notify ? <Notify message={notifyMessage} /> : null}
@@ -155,7 +200,7 @@ const ChatBox = (props: any) => {
         <button
           type="submit"
           className="btn"
-          onClick={sendMessage}
+          onClick={groupChatMode ? sendGroupMessage : sendMessage}
           id="send-message"
         >
           Send

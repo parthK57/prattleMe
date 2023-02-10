@@ -10,6 +10,7 @@ import {
   getFriendsHandler,
   createGroupHandler,
   joinGroupHandler,
+  getGroupHandler,
 } from "../controllers/users";
 import PasswordVerifier from "../Services/PasswordVerifier";
 
@@ -20,5 +21,6 @@ router.post("/users/adduser", PasswordVerifier, addUserHandler);
 router.post("/users/getfriends", PasswordVerifier, getFriendsHandler);
 router.post("/users/creategroup", PasswordVerifier, createGroupHandler);
 router.post("/users/joingroup", PasswordVerifier, joinGroupHandler);
+router.post("/users/getgroup", PasswordVerifier, getGroupHandler);
 
 export default router;

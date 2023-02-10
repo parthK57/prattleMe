@@ -6,12 +6,14 @@ import {
   clearMessages,
   friendsListPopulate,
   messagesPopulate,
-  clearFriendsList
+  clearFriendsList,
+  activateGroupChatMode,
+  deactivateGroupChatMode,
+  setGroupChatDetails,
 } from "../../store";
 
 const email = localStorage.getItem("email");
 const password = localStorage.getItem("password");
-
 
 type friendsOBJ = {
   user1: string;
@@ -25,17 +27,22 @@ interface messages {
   timestamp: string;
   clientEmail: string;
 }
+interface groupInterface {
+  groupname: string;
+  id: string;
+}
 type messageArray = messages[];
 let friendsArray: Array<friendsOBJ> = [];
+let group: Array<groupInterface> = [];
 
-const FriendList = (props:any) => {
+const FriendList = (props: any) => {
   const dispatch = useDispatch();
   const socket = props.socket;
 
   // Resetting FriendList
   dispatch(clearFriendsList());
   friendsArray = [];
-  
+
   useLayoutEffect(() => {
     const getFriends = async () => {
       try {
@@ -56,6 +63,74 @@ const FriendList = (props:any) => {
       }
     };
     getFriends();
+    const getGroups = async () => {
+      try {
+        const response = await axios.post(
+          "http://localhost:5000/users/getgroup",
+          {
+            email: email,
+            password: password,
+          }
+        );
+        if (response.status == 200) {
+          group = response.data;
+          groupPopulator(group);
+          console.log(group);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getGroups();
+
+    const groupPopulator = async (jsonData: Array<groupInterface>) => {
+      const friendListContainer = document.querySelector(
+        "#FriendList"
+      ) as HTMLDivElement;
+      console.log(friendListContainer)
+      for (let i = 0; i < jsonData.length; i++) {
+
+        console.log(jsonData[i].groupname, jsonData[i].id);
+
+        const friendContainer = document.createElement("div");
+        const friendName = document.createElement("p");
+
+        friendContainer.className = "Friend";
+        friendName.className = "Friend-Username";
+        friendName.innerText = `${jsonData[i].groupname}`;
+        friendContainer.style.cursor = "pointer";
+        friendContainer.addEventListener("click", openChat);
+        function openChat() {
+          // join the room for realtime chatting
+          socket.emit("join-room", jsonData[i]);
+
+          // clearing message and populating friends
+          dispatch(clearMessages());
+          dispatch(activateGroupChatMode(true));
+          dispatch(setGroupChatDetails({room: `${jsonData[i].id}`, groupname: `${jsonData[i].groupname}`}));
+          const getMessages = async () => {
+            try {
+              const response: any = await axios.post(
+                "http://localhost:5000/message/getmessage",
+                {
+                  email: email,
+                  password: password,
+                  id: jsonData[i].id,
+                }
+              );
+              const messageArray = response.data as messageArray;
+              dispatch(messagesPopulate(messageArray));
+            } catch (error) {
+              console.log(error);
+            }
+          };
+          //getMessages();
+        }
+        // Appending messages
+        friendContainer.appendChild(friendName);
+        friendListContainer.appendChild(friendContainer);
+      }
+    };
 
     const friendListPopulator = async (jsonData: Array<friendsOBJ>) => {
       const friendListContainer = document.querySelector(
@@ -76,6 +151,7 @@ const FriendList = (props:any) => {
 
           // clearing message and populating friends
           dispatch(clearMessages());
+          dispatch(deactivateGroupChatMode());
           dispatch(friendsListPopulate(jsonData[i]));
           const getMessages = async () => {
             try {
@@ -96,11 +172,12 @@ const FriendList = (props:any) => {
           getMessages();
         }
 
+        // Appending messages
         friendContainer.appendChild(friendName);
         friendListContainer.appendChild(friendContainer);
       }
     };
-  },[]);
+  }, []);
 
   return (
     <>
